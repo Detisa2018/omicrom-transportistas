@@ -12,6 +12,7 @@ class Usuarios {
     const MAX_INTENTS_LOGIN = 5; //Número máximo de intentos permitidos para una cuenta
     const SESSION_USERNAME = "U";
     const SESSION_PASSWORD = "P";
+    const SESSION_SUCURSAL = "S";
 
     private $usuarioVO;
     private $usuarioDAO;

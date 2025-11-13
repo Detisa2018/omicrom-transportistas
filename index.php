@@ -138,12 +138,25 @@ foreach ($_COOKIE as $Cok => $val) {
                                                 Ingrese sus datos
                                             </div>
                                             <div id="boxTable" class="texto_tablas">
+
+                                                <div class="input-icons">
+                                                    <select name="Sucursal" id="Sucursal">
+                                                        <option>Seleccione la sucursal</option>
+                                                        <?php
+                                                        $Cias = utils\IConnection::getRowsFromQuery("SELECT idfae,cia FROM cia;");
+                                                        foreach ($Cias as $cia) {
+                                                            ?>
+                                                            <option value="<?= $cia["idfae"] ?>"><?= $cia["cia"] ?></option>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
                                                 <div class="input-icons">
                                                     <i class="icon fa fa-lg fa-user" aria-hidden="true"></i>
                                                     <input type="text" name="username" id="Usuario" class="input-field" placeholder="Usuario" autocomplete="none" required/>
                                                 </div>
                                                 <div class="input-icons">
-
                                                     <i class="icon fa fa-lg fa-key" aria-hidden="true"></i>
                                                     <input type="text" name="text" id="Contrasenia" class="input-field"  placeholder="Contraseña" autocomplete="new-password" required/>
                                                     <span id="PasswordEye" style="color: #566573" toggle="#password-field" class="fa fa-fw fa-eye-slash field_icon toggle-password"></span>

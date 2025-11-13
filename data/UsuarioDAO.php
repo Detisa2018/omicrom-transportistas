@@ -35,6 +35,7 @@ class UsuarioDAO {
     public function create($objectVO, $isUser = true) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal, "
                 . "name, "
                 . "uname, "
                 . "passwd, "
@@ -48,9 +49,10 @@ class UsuarioDAO {
                 . "logincount, "
                 . "mail "
                 . ") "
-                . "VALUES(?, ?, MD5(?), ?, ?, ?, ?, NOW(), NOW(), CURRENT_DATE(), 0, ?)";
+                . "VALUES(?, ?, ?, MD5(?), ?, ?, ?, ?, NOW(), NOW(), CURRENT_DATE(), 0, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssissss",
+            $ps->bind_param("isssissss",
+                    $objectVO->getSucursal(),
                     $objectVO->getNombre(),
                     $objectVO->getUsername(),
                     $objectVO->getPassword(),
@@ -127,8 +129,10 @@ class UsuarioDAO {
      */
     public function fillObject($rs) {
         $objectVO = new UsuarioVO();
+        error_log("INFO SUC " . $rs["sucursal"]);
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
             $objectVO->setNombre($rs["name"]);
             $objectVO->setUsername($rs["uname"]);
             $objectVO->setPassword($rs["passwd"]);
@@ -173,10 +177,11 @@ class UsuarioDAO {
      * @param string $password
      * @return UsuarioVO
      */
-    public function finfByUnameAndPassword($uname, $password) {
+    public function finfByUnameAndPassword($uname, $password, $sucursal) {
         $objectVO = new UsuarioVO();
         $sql = "SELECT " . self::TABLA . ".*, ((authuser.lastactivity + INTERVAL 10 MINUTE) - NOW()) difference FROM " . self::TABLA . " "
-                . "WHERE uname = '" . $uname . "' AND passwd = MD5('" . $password . "') AND status = '" . StatusUsuario::ACTIVO . "'";
+                . "WHERE uname = '" . $uname . "' AND sucursal = $sucursal  AND passwd = MD5('" . $password . "') AND status = '" . StatusUsuario::ACTIVO . "'";
+        error_log("QUERY  " . $sql);
         if (($query = $this->conn->query($sql)) && ($rs = $query->fetch_assoc())) {
             $objectVO = $this->fillObject($rs);
             //error_log($objectVO);

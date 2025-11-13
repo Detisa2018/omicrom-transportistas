@@ -10,6 +10,7 @@ $sanitize = SanitizeUtil::getInstance();
 
 $username = $sanitize->sanitizeString("username");
 $password = $sanitize->sanitizeString("password");
+$sucursal = $sanitize->sanitizeInt("Sucursal");
 $usuarioVO = new UsuarioVO();
 $varSuccess = "success";
 $varCount = "count";
@@ -19,7 +20,7 @@ $jsonString[$varSuccess] = false;
 $jsonString["message"] = "";
 $jsonString[$varCount] = 0;
 $jsonString["redirect"] = "vAuthenticate.php";
-
+error_log("RETRIVE " . print_r($sanitize, true));
 try {
     session_start();
     $_SESSION = array();
@@ -27,7 +28,7 @@ try {
     $usuarioVO_U = $usuarioDAO->findByUname($username);
 
     if ($usuarioVO_U != null) {
-        $usuarioVO = $usuarioDAO->finfByUnameAndPassword($username, $password);
+        $usuarioVO = $usuarioDAO->finfByUnameAndPassword($username, $password, $sucursal);
         if ($usuarioVO != null && $usuarioVO->getStatus() === StatusUsuario::ACTIVO && $usuarioVO->getLocked() < Usuarios::MAX_INTENTS_LOGIN) {
 
             if ($usuarioVO->getAlive() == StatusSesion::DEAD || $usuarioVO->getDifference() < 0) {
@@ -56,8 +57,10 @@ try {
                 BitacoraDAO::getInstance()->saveLogSn($username, "ACCESO", "LOGIN EXITOSO", "", AlarmasDAO::VAL20);
 // Cerrando el archivo
                 fclose($archivo);
+                error_log("USUARIO VO " . print_r($usuarioVO, true));
                 utils\HTTPUtils::setSessionValue(Usuarios::SESSION_USERNAME, $usuarioVO->getUsername());
                 utils\HTTPUtils::setSessionValue(Usuarios::SESSION_PASSWORD, $usuarioVO->getPassword());
+                utils\HTTPUtils::setSessionValue(Usuarios::SESSION_SUCURSAL, $usuarioVO->getSucursal());
             } elseif ($usuarioVO->getAlive() == StatusSesion::ALIVE) {
                 $jsonString[$varCount] = null;
                 $Msj = str_replace("?", $username, utils\Messages::RESPONSE_USER_ALIVE);

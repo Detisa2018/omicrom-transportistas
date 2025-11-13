@@ -16,6 +16,7 @@
 class UsuarioVO {
 
     private $idUsuario;
+    private $sucursal;
     private $nombre;
     private $username;
     private $password;
@@ -35,6 +36,14 @@ class UsuarioVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
     }
 
     function getId() {

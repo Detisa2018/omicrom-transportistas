@@ -56,7 +56,7 @@ $(document).ready(function () {
             url: "auth_ajax.php",
             dataType: "json",
             cache: false,
-            data: {"username": $("#Usuario").val(), "password": $("#Contrasenia").val(), "recordar": $("#Recordarme").val()},
+            data: {"username": $("#Usuario").val(), "password": $("#Contrasenia").val(), "Sucursal":$("#Sucursal").val(),"recordar": $("#Recordarme").val()},
             beforeSend: function (xhr) {
                 $("#Msj").hide();
                 $("#Fail").hide();

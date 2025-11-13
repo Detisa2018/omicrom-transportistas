@@ -156,9 +156,9 @@ if ($stB["tipo_permiso"] !== "TRA") {
         <?PHP
         $Band = "SELECT tipo_permiso FROM cia;";
         $stB = utils\IConnection::execSql($Band);
-         if ($stB["tipo_permiso"] === "TRA") {
-             
-         }else if ($stB["tipo_permiso"] !== "TRA" && $stB["tipo_permiso"] !== "EXP") {
+        if ($stB["tipo_permiso"] === "TRA") {
+            
+        } else if ($stB["tipo_permiso"] !== "TRA" && $stB["tipo_permiso"] !== "EXP") {
             ?>
             <a href=javascript:winuni("calendarRm.php?busca=ini");><i class="fa fa-calendar-plus-o fa-lg" aria-hidden="true" style="color:#009080;"> Registro de pedidos</i></a>
             <table style="width: 100%;text-align: center;" aria-hidden="true">
@@ -183,7 +183,7 @@ if ($stB["tipo_permiso"] !== "TRA") {
                     </tr>
                 </table>
             </form>
-        <?php
+            <?php
         } else {
 
             $VcSc = utils\IConnection::execSql("SELECT valor FROM variables_corporativo WHERE llave = 'ServicioComercial';");
