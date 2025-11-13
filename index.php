@@ -140,8 +140,9 @@ foreach ($_COOKIE as $Cok => $val) {
                                             <div id="boxTable" class="texto_tablas">
 
                                                 <div class="input-icons">
-                                                    <select name="Sucursal" id="Sucursal">
-                                                        <option>Seleccione la sucursal</option>
+                                                    <i class="icon fa fa-lg fa-building" aria-hidden="true"></i>
+                                                    <select name="Sucursal" id="Sucursal" style="text-align: left !important;padding-left: 22px !important;">
+                                                        <option style="text-align: center !important;">Sucursales</option>
                                                         <?php
                                                         $Cias = utils\IConnection::getRowsFromQuery("SELECT idfae,cia FROM cia;");
                                                         foreach ($Cias as $cia) {
@@ -161,19 +162,11 @@ foreach ($_COOKIE as $Cok => $val) {
                                                     <input type="text" name="text" id="Contrasenia" class="input-field"  placeholder="Contraseña" autocomplete="new-password" required/>
                                                     <span id="PasswordEye" style="color: #566573" toggle="#password-field" class="fa fa-fw fa-eye-slash field_icon toggle-password"></span>
                                                 </div>
-                                                <!--                                                <div style="width:100%;">
-                                                                                                    <div style="display: inline-block;width: 50%;">
-                                                                                                        <input type="checkbox" name="Recordarme" id="Recordarme"> Recordarme
-                                                                                                    </div>
-                                                                                                </div>-->
                                                 <span style="margin-left: auto; margin-right: auto;">
                                                     <button id="IdEntrar"><i class="icon fa fa-lg fa-sign-in" aria-hidden="true"></i> Entrar</button>
                                                 </span>
                                             </div>
                                             <div style="width: 100%;text-align: center;font-weight: bold;font-size: 11px;color: #566573;">
-                                                <?= $ciaVO->getCia() ?> 
-                                                <br>No.estacion: <?= $ciaVO->getNumestacion() ?> Sucursal: <?= $ciaVO->getEstacion() ?>
-                                                <br>Permiso CRE: <?= $ciaVO->getPermisocre() ?>
                                                 <?php
                                                 $Md5 = "SELECT md5 FROM servicios WHERE nombre = 'Omicrom';";
                                                 $Ms5Omicrom = utils\IConnection::execSql($Md5);

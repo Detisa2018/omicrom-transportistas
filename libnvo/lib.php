@@ -125,7 +125,7 @@ function BordeSuperior($clientes = FALSE) {
     $usuarioSesion = getSessionUsuario();
     //error_log(print_r($usuarioSesion,true));
     $ciaDAO = new CiaDAO();
-    $ciaVO = $ciaDAO->retrieve(1);
+    $ciaVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
     $lBd = false;
 
     $Profile = $usuarioSesion->getTeam();

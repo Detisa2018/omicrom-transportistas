@@ -13,7 +13,6 @@ $mysqli = iconnect();
 $request = utils\Request::instance();
 
 $usuarioSesion = getSessionUsuario();
-
 $cId = utils\HTTPUtils::getRequest()->getAttribute("cId");
 $cPrc = utils\HTTPUtils::getRequest()->getAttribute("cPrc");
 $isla = utils\HTTPUtils::getRequest()->getAttribute("isla");

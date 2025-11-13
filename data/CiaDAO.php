@@ -131,7 +131,7 @@ class CiaDAO implements FunctionsDAO {
                 LEFT JOIN permisos_cre cre ON TRUE
                 AND cre.catalogo = 'VARIABLES_EMPRESA'
                 AND cre.llave = 'PERMISO_CRE'
-                WHERE " . $idObject;
+                WHERE idfae = $idObject";
         if (($query = $this->conn->query($sql)) && ($rs = $query->fetch_assoc())) {
             $cia = $this->fillObject($rs);
         } else {
