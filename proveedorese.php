@@ -58,7 +58,7 @@ $arrayProveedor = Array("Nacional" => "Nacional", "Extranjero" => "Extranjero");
                                     <form name="formulario1" id="formulario1" method="post" action="">
                                         <div class="row no-padding">
                                             <div class="col-4 align-right  required">Id:</div>
-                                            <div class="col-4"><input type="text" name="Id" id="Id" placeholder="" disabled=""/></div>
+                                            <div class="col-4" style="vertical-align: bottom"><?= $objectVO->getFolio() ?><input type="hidden" name="Id" id="Id"/></div>
                                         </div>
                                         <div class="row no-padding">
                                             <div class="col-4 align-right  required">Nombre:</div>
@@ -313,7 +313,7 @@ $arrayProveedor = Array("Nacional" => "Nacional", "Extranjero" => "Extranjero");
                                 $(document).ready(function () {
                                     /*Comenzamos con boton para poder agregar*/
                                     $("#ActualizaUbi").hide();
-                                    
+
                                     /*Limpiamos apartado de Direcciónes para pdoer agregar una nueva*/
                                     $("#AddUbicacion").click(function () {
                                         $("#CodigoPostalCP").val("");
@@ -421,7 +421,7 @@ $arrayProveedor = Array("Nacional" => "Nacional", "Extranjero" => "Extranjero");
                                             url: 'getByAjax.php',
                                             dataType: 'json',
                                             cache: false,
-                                            data: {"Op": "ObtenDireccion", "idDireccion": idDireccion, "Origen" : "P"},
+                                            data: {"Op": "ObtenDireccion", "idDireccion": idDireccion, "Origen": "P"},
                                             success: function (data) {
                                                 AjaxCodigoPostal(data.CodigoPostal, data.Colonia);
                                                 AjaxEstado(data.Estado, data.Municipio, data.Localidad);

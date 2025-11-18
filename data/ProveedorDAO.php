@@ -37,6 +37,8 @@ class ProveedorDAO implements FunctionsDAO {
     public function create($objectVO = ProveedorVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal, "
+                . "folio, "
                 . "nombre,"
                 . "direccion,"
                 . "colonia,"
@@ -62,9 +64,11 @@ class ProveedorDAO implements FunctionsDAO {
                 . "permisoCRE,"
                 . "tipoProveedor"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("ssssssssssssssssssssssss",
+            $ps->bind_param("iissssssssssssssssssssssss",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getNombre(),
                     $objectVO->getDireccion(),
                     $objectVO->getColonia(),
@@ -113,6 +117,8 @@ class ProveedorDAO implements FunctionsDAO {
         $objectVO = new ProveedorVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setNombre($rs["nombre"]);
             $objectVO->setDireccion($rs["direccion"]);
             $objectVO->setColonia($rs["colonia"]);

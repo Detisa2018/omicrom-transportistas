@@ -51,6 +51,11 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     //error_log(print_r($proveedorVO, TRUE));
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
+
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM prv WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $proveedorVO->setFolio($RsF["Folio"]);
+            $proveedorVO->setSucursal($usuarioSesion->getSucursal());
             if ($proveedorDAO->create($proveedorVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
             } else {

@@ -12,6 +12,8 @@
 class ProveedorVO {
 
     private $id;
+    private $sucursal;
+    private $folio;
     private $nombre;
     private $direccion;
     private $colonia;
@@ -43,6 +45,22 @@ class ProveedorVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
+    }
+
+    public function setFolio($folio): void {
+        $this->folio = $folio;
     }
 
     function getId() {

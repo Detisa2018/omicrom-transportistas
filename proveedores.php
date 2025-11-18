@@ -9,6 +9,7 @@ use com\softcoatl\utils as utils;
 
 $request = utils\HTTPUtils::getRequest();
 $session = new OmicromSession("prv.nombre", "prv.nombre");
+$usuarioSesion = getSessionUsuario();
 
 $busca = $session->getSessionAttribute("criteria");
 $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
@@ -16,11 +17,12 @@ $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
 $Id = 17;
 $Titulo = "Catalogo de proveedores varios";
 
+$conditions = " sucursal =  " . $usuarioSesion->getSucursal();
 $paginador = new Paginador($Id,
+        "id",
         "",
         "",
-        "",
-        "",
+        $conditions,
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),
@@ -56,7 +58,7 @@ require_once './services/ProveedoresService.php';
 
         <?php BordeSuperior(); ?>
         <div id="TablaDatos">
-             <table class="paginador" aria-hidden="true">
+            <table class="paginador" aria-hidden="true">
                 <?php
                 if (empty($session->getSessionAttribute("returnLink"))) {
                     echo $paginador->headers(array("Editar"), array("Borrar"));
