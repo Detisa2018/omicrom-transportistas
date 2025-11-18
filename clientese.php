@@ -13,6 +13,7 @@ $mysqli = iconnect();
 $request = utils\HTTPUtils::getRequest();
 $self = utils\HTTPUtils::self();
 
+$usuarioSesion = getSessionUsuario();
 $Titulo = "Detalle de cliente";
 $nameVarBusca = "busca";
 if ($request->hasAttribute($nameVarBusca)) {
@@ -39,7 +40,7 @@ if (is_numeric($busca)) {
 } else {
     if ($request->hasAttribute("Rfc")) {
         $clienteVO->setRfc($request->getAttribute("Rfc"));
-        $clienteByRfc = $clienteDAO->retrieve($request->getAttribute("Rfc"), "rfc", " AND id > 20 ");
+        $clienteByRfc = $clienteDAO->retrieve($request->getAttribute("Rfc"), "rfc", " AND id > 20 AND sucursal = " . $usuarioSesion->getSucursal());
         if ($clienteByRfc->getId() > 0) {
             $clienteVO = $clienteByRfc;
             utils\HTTPUtils::setSessionValue($nameVarBusca, $clienteByRfc->getId());

@@ -31,7 +31,6 @@ if ($request->hasAttribute("cVarVal")) {
 }
 
 $cVarVal = utils\HTTPUtils::getSessionBiValue($nameVariableSession, "cVarVal");
-
 if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils\Messages::OP_NO_OPERATION_VALID) {
     $Msj = utils\Messages::MESSAGE_NO_OPERATION;
     $Return = "clientes.php?";
@@ -45,6 +44,7 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
         $clienteVO = new ClientesVO();
         $clienteVO->setUltimaModificacion(date("Y-m-d H:i:s"));
         $clienteVO->setId($sanitize->sanitizeInt("busca"));
+        $clienteVO->setSucursal($usuarioSesion->getSucursal());
         if (is_numeric($clienteVO->getId())) {
             if ($usuarioSesion->getLevel() < UsuarioDAO::LEVEL_MASTER) {
                 $clienteVO = $clienteDAO->retrieve($clienteVO->getId());
@@ -109,6 +109,9 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
                 $clienteVO->setTipodepago(TiposCliente::CONTADO);
             }
             $clienteVO->setPuntos(0);
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM cli WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $clienteVO->setFolio($RsF["Folio"]);
             if (($id = $clienteDAO->create($clienteVO)) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
                 BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(), "ADM", "ALTA DE CLIENTE [$id] " . $clienteVO->getNombre());
@@ -179,7 +182,7 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
 if ($request->hasAttribute("Boton2") && $request->getAttribute("Boton2") !== utils\Messages::OP_NO_OPERATION_VALID) {
     $Msj = utils\Messages::MESSAGE_NO_OPERATION;
     $Return = "clientes.php?";
-
+    error_log("ENTRAMOS EN 2");
     try {
         $busca = $sanitize->sanitizeInt("busca");
         $objectDAO = new DireccionDAO();
@@ -211,6 +214,7 @@ if ($request->hasAttribute("Boton2") && $request->getAttribute("Boton2") !== uti
 
 
 if ($request->hasAttribute("op")) {
+    error_log("ENTRAMOS EN 3");
     $Msj = utils\Messages::MESSAGE_NO_OPERATION;
     $Return = "clientes.php?";
     $cId = $sanitize->sanitizeInt("cId");

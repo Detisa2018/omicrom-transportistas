@@ -26,16 +26,16 @@ $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
 $Id = 32;
 $Titulo = "Catalogo de clientes";
 
-$conditions = "";
+$conditions = " AND sucursal =  " . $usuarioSesion->getSucursal();
 if ($Facturar == 2) {
     $conditions = " AND cli.tipodepago NOT IN ('" . TiposCliente::PUNTOS . "') ";
 }
 $VCorp = "SELECT valor FROM omicrom.variables_corporativo WHERE llave = 'encrypt_fields'";
 $VCp = utils\IConnection::execSql($VCorp);
 if ($VCp["valor"] == 1) {
-    $AddCampos = " deencrypt_data(direccion) direccion, deencrypt_data(colonia) colonia, deencrypt_data(numeroext) numeroext, deencrypt_data(numeroint) numeroint, codigo, deencrypt_data(municipio) municipio, estado, deencrypt_data(telefono) telefono, deencrypt_data(correo) correo ";
+    $AddCampos = "id, deencrypt_data(direccion) direccion, deencrypt_data(colonia) colonia, deencrypt_data(numeroext) numeroext, deencrypt_data(numeroint) numeroint, codigo, deencrypt_data(municipio) municipio, estado, deencrypt_data(telefono) telefono, deencrypt_data(correo) correo ";
 } else {
-    $AddCampos = "direccion, colonia, numeroext, numeroint, codigo, municipio, estado, telefono, correo";
+    $AddCampos = "id, direccion, colonia, numeroext, numeroint, codigo, municipio, estado, telefono, correo";
 }
 $paginador = new Paginador($Id,
         $AddCampos,
@@ -126,7 +126,7 @@ if (utils\HTTPUtils::getSessionObject("Tipo") == 1 && $session->getSessionAttrib
                 <?php
                 $Visualiza = "SELECT valor FROM variables_corporativo WHERE llave ='AddTicketsCliente'";
                 $VsV = utils\IConnection::execSql($Visualiza);
-                $ArrayLeft = ($usuarioSesion->getTeam() === "Administrador" || $usuarioSesion->getTeam() === "Supervisor") && $VsV["valor"] == 1 ? array("Editar", "Codigos", "Relacionar") : array("Editar", "Codigos");
+                $ArrayLeft = array("Editar");
                 if (empty($session->getSessionAttribute("returnLink"))) {
                     echo $paginador->headers($ArrayLeft, array("Borrar"));
                     while ($paginador->next()) {
@@ -134,14 +134,6 @@ if (utils\HTTPUtils::getSessionObject("Tipo") == 1 && $session->getSessionAttrib
                         ?>
                         <tr>
                             <td style="text-align: center;"><a href="<?= $cLink ?>?busca=<?= $row['id'] ?>"><i class="icon fa fa-lg fa-edit" aria-hidden="true"></i></a></td>
-                            <td style="text-align: center;"><a href="<?= $cLinkd ?>?criteria=ini&cVarVal=<?= $row["id"] ?>"><i class="icon fa fa-lg fa-barcode" aria-hidden="true"></i></a></td>
-                            <?php
-                            if (($usuarioSesion->getTeam() === "Administrador" || $usuarioSesion->getTeam() === "Supervisor") && $VsV["valor"] == 1) {
-                                ?>
-                                <td style="text-align: center;"><a href="clientesAgregaVentas.php?criteria=ini&busca=<?= $row["id"] ?>"><i class="fa-solid fa-folder-plus"></i></a></td>
-                                <?php
-                            }
-                            ?>
                             <?php echo $paginador->formatRow(); ?>
                             <td style="text-align: center;"><a href=javascript:borrarRegistro("<?= $self ?>",<?= $row["id"] ?>,"cId");><i class="icon fa fa-lg fa-trash" aria-hidden="true"></i></a></td>
                         </tr>

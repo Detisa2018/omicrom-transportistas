@@ -23,14 +23,10 @@ class ClientesDAO implements FunctionsDAO {
     const GENERIC_RFC = "XAXX010101000";
 
     private $conn;
-    private $v_corporativoDAO;
     private $encrypt = 0;
 
     function __construct() {
         $this->conn = getConnection();
-        $this->v_corporativoDAO = new V_CorporativoDAO();
-        $v_corporativoVO = $this->v_corporativoDAO->retrieve(V_CorporativoDAO::ENCRIPT_FIELD);
-        $this->encrypt = $v_corporativoVO->getValor();
     }
 
     function __destruct() {
@@ -45,7 +41,9 @@ class ClientesDAO implements FunctionsDAO {
     public function create($objectVO = ClientesVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "folio, "
                 . "nombre,"
+                . "sucursal,"
                 . "direccion,"
                 . "colonia,"
                 . "municipio,"
@@ -81,11 +79,13 @@ class ClientesDAO implements FunctionsDAO {
         if ($this->encrypt == 1) {
             $sql .= "VALUES(" . ClientesVO::prepareEncryptFieds() . ")";
         } else {
-            $sql .= "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql .= "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssssssssssssssssssssssssiiisiis",
+            $ps->bind_param("isissssssssssssssssssssssssiiisiis",
+                    $objectVO->getFolio(),
                     $objectVO->getNombre(),
+                    $objectVO->getSucursal(),
                     $objectVO->getDireccion(),
                     $objectVO->getColonia(),
                     $objectVO->getMunicipio(),
@@ -141,6 +141,8 @@ class ClientesDAO implements FunctionsDAO {
         $objectVO = new ClientesVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setFolio($rs["folio"]);
+            $objectVO->setSucursal($rs["sucursal"]);
             $objectVO->setNombre($rs["nombre"]);
             $objectVO->setDireccion($rs["direccion"]);
             $objectVO->setColonia($rs["colonia"]);
@@ -220,9 +222,9 @@ class ClientesDAO implements FunctionsDAO {
         $objectVO = new ClientesVO();
         $sql = "SELECT * FROM " . self::TABLA . " WHERE " . $field . " = '" . $idObjectVO . "' $Add LIMIT 1";
         if ($this->encrypt == 1) {
-            $sql = "SELECT " . ClientesVO::retrieveDeencryptFieds() . " FROM " . self::TABLA . " WHERE " . $field . " = '" . $idObjectVO . "' LIMIT 1";
+            $sql = "SELECT " . ClientesVO::retrieveDeencryptFieds() . " FROM " . self::TABLA . " WHERE " . $field . " = '" . $idObjectVO . "'  $Add LIMIT 1";
         }
-        //error_log($sql);
+        error_log($sql);
         if (($query = $this->conn->query($sql)) && ($rs = $query->fetch_assoc())) {
             $objectVO = $this->fillObject($rs);
         } else {
@@ -240,6 +242,7 @@ class ClientesDAO implements FunctionsDAO {
         //error_log(print_r($objectVO, TRUE));
         $sql = "UPDATE " . self::TABLA . " SET "
                 . "nombre = ?, "
+                . "sucursal = ?, "
                 . "direccion = ?, "
                 . "colonia = ?, "
                 . "municipio = ?, "
@@ -280,8 +283,9 @@ class ClientesDAO implements FunctionsDAO {
         }
 
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssssssssssssssssssssssssiissiidi",
+            $ps->bind_param("sissssssssssssssssssssssssiissiidi",
                     $objectVO->getNombre(),
+                    $objectVO->getSucursal(),
                     $objectVO->getDireccion(),
                     $objectVO->getColonia(),
                     $objectVO->getMunicipio(),
@@ -315,10 +319,11 @@ class ClientesDAO implements FunctionsDAO {
                     $objectVO->getDescuentocli(),
                     $objectVO->getId()
             );
-            error_log("LOGGGG" . print_r($objectVO, true));
-            return $ps->execute();
+            if ($ps->execute()) {
+                return true;
+            }
+            error_log($ps->error);
         }
-        error_log($this->conn->error);
         return false;
     }
 

@@ -13,6 +13,8 @@
 class ClientesVO {
 
     private $id;
+    private $sucursal;
+    private $folio;
     private $nombre;
     private $direccion = "";
     private $colonia = "";
@@ -48,6 +50,22 @@ class ClientesVO {
 
     private function nvl($value) {
         return $value === NULL ? "" : $value;
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setFolio($folio): void {
+        $this->folio = $folio;
     }
 
     public function getDescuentocli() {
@@ -316,6 +334,7 @@ class ClientesVO {
 
     public static function retrieveDeencryptFieds() {
         return "id,"
+                . "folio,"
                 . "nombre,"
                 . "deencrypt_data(direccion) direccion,"
                 . "deencrypt_data(colonia) colonia,"
@@ -352,6 +371,7 @@ class ClientesVO {
 
     public static function retrieveEncryptFieds() {
         return "nombre = ?, "
+                . "sucursal = ?, "
                 . "direccion = encrypt_data(?), "
                 . "colonia = encrypt_data(?), "
                 . "municipio = encrypt_data(?), "
@@ -387,6 +407,8 @@ class ClientesVO {
 
     public static function prepareEncryptFieds() {
         return "?, "
+                . "?,"
+                . "?, "
                 . "encrypt_data(?), "
                 . "encrypt_data(?), "
                 . "encrypt_data(?), "
