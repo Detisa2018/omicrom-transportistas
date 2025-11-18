@@ -37,13 +37,13 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     $usuarioVO->setUsername($sanitize->sanitizeString("Uname"));
     $usuarioVO->setMail($sanitize->sanitizeEmail("Mail"));
     $usuarioVO->setStatus($sanitize->sanitizeString("Status"));
-
+    $usuarioVO->setSucursal($usuarioSesion->getSucursal());
     $team = utils\IConnection::execSql("SELECT perfil FROM authuser_rol WHERE id = " . $usuarioVO->getRol());
     $usuarioVO->setTeam($team["perfil"]);
 
-    //error_log(print_r($request, TRUE));
+    
     try {
-
+        
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
             $usuarioVO->setPassword($sanitize->sanitizeString("Passwd"));
 

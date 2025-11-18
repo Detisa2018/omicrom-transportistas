@@ -10,6 +10,7 @@ use com\softcoatl\utils as utils;
 $request = utils\HTTPUtils::getRequest();
 $nameSession = "catalogoUsuarios";
 $arrayFilter = array("locked" => 0);
+$usuarioSesion = getSessionUsuario();
 $session = new OmicromSession("us.id", "us.id", $nameSession, $arrayFilter, "locked");
 
 foreach ($arrayFilter as $key => $value) {
@@ -32,7 +33,7 @@ $paginador = new Paginador($Id,
         "us.alive,us.locked",
         "",
         "",
-        "us.level <= 8  AND groupwork = 0  " . $conditions,
+        "sucursal = " . $usuarioSesion->getSucursal() . " AND us.level <= 8  AND groupwork = 0  " . $conditions,
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),

@@ -27,7 +27,6 @@ utils\HTTPUtils::setSessionObject("Tipo", $tipo);
 $session = new OmicromSession($tipo != 2 ? "t.id" : "ingresos.id", $tipo != 2 ? "t.id" : "ingresos.id", $nameSession, $arrayFilter, "tipo");
 $DireccionDetalle = $tipo != 2 ? "TrasladosCartaPorte.php" : "IngresosCartaPorte.php";
 $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
-echo $tipo;
 $conditions = "";
 
 $Titulo = "Modulo de Carta Porte";

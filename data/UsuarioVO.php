@@ -16,6 +16,7 @@
 class UsuarioVO {
 
     private $idUsuario;
+    private $folio;
     private $sucursal;
     private $nombre;
     private $username;
@@ -37,8 +38,15 @@ class UsuarioVO {
     function __construct() {
         
     }
+    public function getFolio() {
+        return $this->folio;
+    }
 
-    public function getSucursal() {
+    public function setFolio($folio): void {
+        $this->folio = $folio;
+    }
+
+        public function getSucursal() {
         return $this->sucursal;
     }
 
