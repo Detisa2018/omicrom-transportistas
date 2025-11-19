@@ -12,6 +12,8 @@
 class VehiculoVO {
 
     private $id;
+    private $sucursal;
+    private $folio;
     private $descripcion;
     private $conf_vehicular;
     private $placa;
@@ -27,6 +29,22 @@ class VehiculoVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setSucursal($sucursal) {
+        $this->sucursal = $sucursal;
+    }
+
+    public function setFolio($folio) {
+        $this->folio = $folio;
     }
 
     public function getPeso_bruto() {

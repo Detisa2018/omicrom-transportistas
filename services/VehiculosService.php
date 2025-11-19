@@ -36,7 +36,11 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     error_log(print_r($vehiculoVO, TRUE));
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
-            error_log("Estamos en add");
+
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM catalogo_vehiculos WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $vehiculoVO->setFolio($RsF["Folio"]);
+            $vehiculoVO->setSucursal($usuarioSesion->getSucursal());
             if ($vehiculoDAO->create($vehiculoVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
             } else {

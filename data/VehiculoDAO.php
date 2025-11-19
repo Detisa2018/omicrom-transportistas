@@ -37,6 +37,8 @@ class VehiculoDAO implements FunctionsDAO {
     public function create($objectVO = VehiculoVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
+                . "folio,"
                 . "descripcion,"
                 . "conf_vehicular,"
                 . "placa,"
@@ -50,9 +52,11 @@ class VehiculoDAO implements FunctionsDAO {
                 . "tipo_figura,"
                 . "peso_bruto"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssssssssssd",
+            $ps->bind_param("iisssssssssssd",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getDescripcion(),
                     $objectVO->getConf_vehicular(),
                     $objectVO->getPlaca(),
@@ -90,6 +94,8 @@ class VehiculoDAO implements FunctionsDAO {
         if (is_array($rs)) {
             $objectVO->setDescripcion($rs["descripcion"]);
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setConf_vehicular($rs["conf_vehicular"]);
             $objectVO->setPlaca($rs["placa"]);
             $objectVO->setAnio_modelo($rs["anio_modelo"]);
