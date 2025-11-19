@@ -37,6 +37,7 @@ class IngresosDAO implements FunctionsDAO {
     public function create($objectVO = IngresosVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
                 . "serie,"
                 . "folio,"
                 . "fecha,"
@@ -60,9 +61,10 @@ class IngresosDAO implements FunctionsDAO {
                 . "id_prv,"
                 . "id_servicios_tra"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("ssssssssssssssssssssii",
+            $ps->bind_param("issssssssssssssssssssii",
+                    $objectVO->getSucursal(),
                     $objectVO->getSerie(),
                     $objectVO->getFolio(),
                     $objectVO->getFecha(),
@@ -109,6 +111,7 @@ class IngresosDAO implements FunctionsDAO {
         $objectVO = new IngresosVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
             $objectVO->setSerie($rs["serie"]);
             $objectVO->setFolio($rs["folio"]);
             $objectVO->setFecha($rs["fecha"]);
@@ -177,7 +180,7 @@ class IngresosDAO implements FunctionsDAO {
      */
     public function retrieve($idObjectVO, $field = "id") {
         $objectVO = new IngresosVO();
-        $sql = "SELECT t.id,t.id_cli,t.serie,t.folio,t.ClaveProdServ,t.fecha,t.cantidad,t.importe,t.iva,t.ieps,t.total,t.status, t.uuid,t.observaciones,t.id_prv,t.id_servicios_tra,"
+        $sql = "SELECT t.id, t.sucursal ,t.id_cli,t.serie,t.folio,t.ClaveProdServ,t.fecha,t.cantidad,t.importe,t.iva,t.ieps,t.total,t.status, t.uuid,t.observaciones,t.id_prv,t.id_servicios_tra,"
                 . "t.usr,t.stCancelacion,t.motivoCan,t.metodoPago,t.formadepago,t.usoCfdi, IFNULL(ExtractValue(f.cfdi_xml, '/cfdi:Comprobante/@Sello'),'') sello "
                 . "FROM " . self::TABLA . " t LEFT JOIN facturas f 
                     ON t.uuid = f.uuid WHERE " . $field . " = '" . $idObjectVO . "'";

@@ -104,11 +104,11 @@ $clienteVO = $clienteDAO->retrieve($IngresosVO->getId_cli());
                             <div class="row no-padding">
                                 <div class="col-12 background no-margin">
                                     <div class="row no-padding">
-                                        <div class="col-4 ">
-                                            <div style="height: 17px;"><strong>Id : </strong> <?= $busca ?> <strong> Carta Porte</strong> <?= $CpVO->getId() ?> </div> 
+                                        <div class="col-3 ">
+                                            <div style="height: 17px;"><strong>Folio : </strong> <?= $IngresosVO->getFolio() ?></div> 
                                             <div style="height: 17px;"><strong>Cantidad : </strong> <?= number_format($IngresosVO->getCantidad(), 2) ?></div>
                                         </div>
-                                        <div class="col-4 row no-padding">
+                                        <div class="col-6 row no-padding">
                                             <div style="width: 100%;height: 25px;"><strong>Nombre / R. Social :</strong> <?= $clienteVO->getNombre() ?></div>
                                             <?php
                                             $sql = "SELECT descripcion FROM cfdi33_c_regimenes WHERE clave = '" . ucwords(strtolower($clienteVO->getRegimenFiscal())) . "'";
@@ -116,7 +116,7 @@ $clienteVO = $clienteDAO->retrieve($IngresosVO->getId_cli());
                                             ?>
                                             <div style="width: 100%;height: 25px;"><strong>Regimen :</strong> <?= $rs["descripcion"] . ".- " . $clienteVO->getRegimenFiscal() ?></div>
                                         </div>
-                                        <div class="col-4 row no-padding">
+                                        <div class="col-3 row no-padding">
                                             <div style="width: 100%;height: 25px;"><strong>RFC :</strong> <?= $clienteVO->getRfc() ?></div>
                                             <div style="width: 100%;height: 25px;"><strong>Codigo Postal : </strong> <?= $clienteVO->getCodigo() ?></div>
                                         </div>

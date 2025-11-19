@@ -16,6 +16,7 @@ $pop = 0;
 $arrayFilter = array("fmt" => $request->has("fmt") ? $request->get("fmt") : 0,
     "tipo" => $request->has("tipo") ? $request->get("tipo") : 1);
 $nameSession = "catalogoTraslados";
+$usuarioSesion = getSessionUsuario();
 foreach ($arrayFilter as $key => $value) {
     ${$key} = utils\HTTPUtils::getSessionBiValue($nameSession, $key);
 }
@@ -33,9 +34,11 @@ $Titulo = "Modulo de Carta Porte";
 if ($tipo != 2) {
     $Id = 141;
     $AddSql = "t.uuid";
+    $conditions = "t.sucursal = " . $usuarioSesion->getSucursal();
 } else if ($tipo == 2) {
     $Id = 156;
     $AddSql = "ingresos.uuid,ingresos.id, ingresos.status";
+    $conditions = "ingresos.sucursal = " . $usuarioSesion->getSucursal();
 }
 
 $paginador = new Paginador($Id,

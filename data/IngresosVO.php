@@ -12,6 +12,7 @@
 class IngresosVO {
 
     private $id;
+    private $sucursal;
     private $serie;
     private $folio;
     private $fecha;
@@ -38,6 +39,14 @@ class IngresosVO {
 
     public function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
     }
 
     public function getId_servicios_tra() {

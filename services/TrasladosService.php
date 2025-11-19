@@ -37,7 +37,7 @@ if ($request->getAttribute("id") === "NUEVO") {
         error_log("Iniciamos con Ingresos");
         error_log(print_r($request, true));
         $IngresosVO = new IngresosVO();
-        $Folio = "SELECT IFNULL(MAX(folio),0) + 1 numMax FROM ingresos;";
+        $Folio = "SELECT IFNULL(MAX(folio),0) + 1 numMax FROM ingresos WHERE sucursal = " . $usuarioSesion->getSucursal();
         $FolioRs = utils\IConnection::execSql($Folio);
         $IngresosVO->setFecha(date("Y-m-d H:i:s"));
         $IngresosVO->setUsr($usuarioSesion->getNombre());
@@ -48,6 +48,7 @@ if ($request->getAttribute("id") === "NUEVO") {
         $IngresosVO->setMetodopago("PUE");
         $IngresosVO->setFormadepago("03");
         $IngresosVO->setUsocfdi("G03");
+        $IngresosVO->setSucursal($usuarioSesion->getSucursal());
         $Ts = $IngresosDAO->create($IngresosVO);
         header("Location: IngresosCartaPorte.php?busca=$Ts");
     }
