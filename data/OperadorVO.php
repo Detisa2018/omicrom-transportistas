@@ -12,6 +12,8 @@
 class OperadorVO {
 
     private $id;
+    private $sucursal;
+    private $folio;
     private $rfc_operador;
     private $nombre;
     private $num_licencia;
@@ -20,6 +22,22 @@ class OperadorVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
+    }
+
+    public function setFolio($folio): void {
+        $this->folio = $folio;
     }
 
     public function getRegistro_fiscal() {

@@ -35,16 +35,20 @@ class OperadorDAO implements FunctionsDAO {
         $id = -1;
 
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
+                . "folio,"
                 . "rfc_operador,"
                 . "nombre,"
                 . "num_licencia,"
                 . "registro_fiscal,"
                 . "recidencia_fiscal"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?)";
         error_log("El valor de sql: " . $sql);
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssss",
+            $ps->bind_param("iisssss",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getRfc_operador(),
                     $objectVO->getNombre(),
                     $objectVO->getNum_licencia(),
@@ -69,6 +73,8 @@ class OperadorDAO implements FunctionsDAO {
         $objectVO = new OperadorVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setRfc_operador($rs["rfc_operador"]);
             $objectVO->setNombre($rs["nombre"]);
             $objectVO->setNum_licencia($rs["num_licencia"]);

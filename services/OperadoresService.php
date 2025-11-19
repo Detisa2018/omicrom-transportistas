@@ -34,14 +34,17 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     $operadorVO->setNum_licencia($sanitize->sanitizeString("Licencia"));
     $operadorVO->setRegistro_fiscal($sanitize->sanitizeString("RegistroFiscal"));
     $operadorVO->setRecidencia_fiscal($sanitize->sanitizeString("RecidenciaFiscal"));
-    
-    
+
     error_log(print_r($request, TRUE));
     try {
         $DireccionVO = new DireccionVO();
         $DireccionDAO = new DireccionDAO();
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
             error_log("Pulsamos en ADD");
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM catalogo_operadores WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $operadorVO->setSucursal($usuarioSesion->getSucursal());
+            $operadorVO->setFolio($RsF["Folio"]);
             if ($operadorDAO->create($operadorVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
             } else {

@@ -9,6 +9,7 @@ use com\softcoatl\utils as utils;
 
 $request = utils\HTTPUtils::getRequest();
 $session = new OmicromSession("op.id", "op.id");
+$usuarioSesion = getSessionUsuario();
 
 $busca = $session->getSessionAttribute("criteria");
 $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
@@ -17,10 +18,10 @@ $Id = 143;
 $Titulo = "Catalogo de Operadores varios";
 
 $paginador = new Paginador($Id,
+        "id",
         "",
         "",
-        "",
-        "",
+        " sucursal = " . $usuarioSesion->getSucursal(),
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),
@@ -72,17 +73,17 @@ require_once './services/OperadoresService.php';
                 ?>
             </table>
         </div>
-<?php
-$nLink = array();
-if (!empty($session->getSessionAttribute("backLink"))) {
-    $nLink["<i class=\"icon fa fa-lg fa-arrow-circle-left\" aria-hidden=\"true\"></i> Regresar"] = $session->getSessionAttribute("backLink");
-}
-echo $paginador->footer($usuarioSesion->getLevel() >= 7 && empty($session->getSessionAttribute("returnLink")), $nLink, false, true);
-echo $paginador->filter();
-echo "<div class='mensajes'>$Msj</div>";
-BordeSuperiorCerrar();
-PieDePagina();
-?>
+        <?php
+        $nLink = array();
+        if (!empty($session->getSessionAttribute("backLink"))) {
+            $nLink["<i class=\"icon fa fa-lg fa-arrow-circle-left\" aria-hidden=\"true\"></i> Regresar"] = $session->getSessionAttribute("backLink");
+        }
+        echo $paginador->footer($usuarioSesion->getLevel() >= 7 && empty($session->getSessionAttribute("returnLink")), $nLink, false, true);
+        echo $paginador->filter();
+        echo "<div class='mensajes'>$Msj</div>";
+        BordeSuperiorCerrar();
+        PieDePagina();
+        ?>
 
     </body>
 </html>
