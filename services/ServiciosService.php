@@ -27,6 +27,10 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
 
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM servicios_tra WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $ServicioTraVO->setSucursal($usuarioSesion->getSucursal());
+            $ServicioTraVO->setFolio($RsF["Folio"]);
             if ($ServiciosTraDAO->create($ServicioTraVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
             } else {

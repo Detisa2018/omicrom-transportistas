@@ -9,6 +9,7 @@ use com\softcoatl\utils as utils;
 
 $request = utils\HTTPUtils::getRequest();
 $session = new OmicromSession("st.id", "st.id");
+$usuarioSesion = getSessionUsuario();
 
 $busca = $session->getSessionAttribute("criteria");
 $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
@@ -17,10 +18,10 @@ $Id = 166;
 $Titulo = "Catalogo de servicios";
 
 $paginador = new Paginador($Id,
+        "st.id",
         "",
         "",
-        "",
-        "",
+        " sucursal = " . $usuarioSesion->getSucursal(),
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),

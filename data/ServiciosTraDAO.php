@@ -36,15 +36,19 @@ class ServiciosTraDAO implements FunctionsDAO {
     public function create($objectVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
+                . "folio,"
                 . "nombre, "
                 . "clave_unidad, "
                 . "clave_producto, "
                 . "precio,"
                 . "identificador"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("sssds",
+            $ps->bind_param("iisssds",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getNombre(),
                     $objectVO->getClave_unidad(),
                     $objectVO->getClave_producto(),
@@ -74,6 +78,8 @@ class ServiciosTraDAO implements FunctionsDAO {
         $objectVO = new ServiciosTraVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setNombre($rs["nombre"]);
             $objectVO->setClave_unidad($rs["clave_unidad"]);
             $objectVO->setClave_producto($rs["clave_producto"]);
