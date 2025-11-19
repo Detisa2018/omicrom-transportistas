@@ -37,6 +37,7 @@ class TrasladosDAO implements FunctionsDAO {
     public function create($objectVO = TrasladosVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
                 . "id_cli,"
                 . "serie,"
                 . "folio, "
@@ -58,9 +59,10 @@ class TrasladosDAO implements FunctionsDAO {
                 . "usoCfdi,"
                 . "id_prv"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("issssssssssssssssssi",
+            $ps->bind_param("iissssssssssssssssssi",
+                    $objectVO->getSucursal(),
                     $objectVO->getId_cli(),
                     $objectVO->getSerie(),
                     $objectVO->getFolio(),
@@ -107,6 +109,7 @@ class TrasladosDAO implements FunctionsDAO {
         $objectVO = new TrasladosVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
             $objectVO->setId_cli($rs["id_cli"]);
             $objectVO->setSerie($rs["serie"]);
             $objectVO->setFolio($rs["folio"]);

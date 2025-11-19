@@ -33,11 +33,11 @@ $conditions = "";
 $Titulo = "Modulo de Carta Porte";
 if ($tipo != 2) {
     $Id = 141;
-    $AddSql = "t.uuid";
+    $AddSql = "t.id,t.uuid";
     $conditions = "t.sucursal = " . $usuarioSesion->getSucursal();
 } else if ($tipo == 2) {
     $Id = 156;
-    $AddSql = "ingresos.uuid,ingresos.id, ingresos.status";
+    $AddSql = "ingresos.id,ingresos.uuid,ingresos.id, ingresos.status";
     $conditions = "ingresos.sucursal = " . $usuarioSesion->getSucursal();
 }
 

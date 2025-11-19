@@ -12,6 +12,7 @@
 class TrasladosVO {
 
     private $id;
+    private $sucursal;
     private $id_cli;
     private $serie = "TCP";
     private $folio;
@@ -36,6 +37,14 @@ class TrasladosVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
     }
 
     public function getIdprv() {

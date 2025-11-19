@@ -23,7 +23,7 @@ if ($request->getAttribute("id") === "NUEVO") {
     if ($request->getAttribute("Op") == 1) {
         error_log("Iniciamos con Traslados");
         $TrasladoVO = new TrasladosVO();
-        $Folio = "SELECT IFNULL(MAX(folio),0) + 1 numMax FROM traslados;";
+        $Folio = "SELECT IFNULL(MAX(folio),0) + 1 numMax FROM traslados WHERE sucursal = " . $usuarioSesion->getSucursal();
         $FolioRs = utils\IConnection::execSql($Folio);
         $TrasladoVO->setFecha(date("Y-m-d H:i:s"));
         $TrasladoVO->setUsr($usuarioSesion->getNombre());
@@ -31,6 +31,7 @@ if ($request->getAttribute("id") === "NUEVO") {
         $TrasladoVO->setId_cli($request->getAttribute("Cliente"));
         $TrasladoVO->setFolio($FolioRs["numMax"]);
         $TrasladoVO->setStatus(0);
+        $TrasladoVO->setSucursal($usuarioSesion->getSucursal());
         $Ts = $TrasladoDAO->create($TrasladoVO);
         header("Location: TrasladosCartaPorte.php?busca=$Ts");
     } else {
