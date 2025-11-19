@@ -37,6 +37,8 @@ class ProductoDAO implements FunctionsDAO {
     public function create($objectVO = ProductoVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal, "
+                . "folio, "
                 . "descripcion,"
                 . "umedida,"
                 . "rubro,"
@@ -58,9 +60,11 @@ class ProductoDAO implements FunctionsDAO {
                 . "factorIva,"
                 . "cuenta_predial"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("ssssiiidsssssssisiis",
+            $ps->bind_param("iissssiiidsssssssisiis",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getDescripcion(),
                     $objectVO->getUmedida(),
                     $objectVO->getRubro(),
@@ -105,6 +109,8 @@ class ProductoDAO implements FunctionsDAO {
         $objectVO = new ProductoVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setDescripcion($rs["descripcion"]);
             $objectVO->setUmedida($rs["umedida"]);
             $objectVO->setRubro($rs["rubro"]);

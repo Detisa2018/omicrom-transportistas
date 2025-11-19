@@ -139,7 +139,9 @@ $rows = utils\IConnection::getRowsFromQuery($selectDetalle);
                     <div id="Formularios">
                         <?php
                         abrirFormulario("formulario1");
-                        crearInputNumber("Clave", "Clave_producto", 0, 99999999999, $siRequerido, "", $clase1, "Posición del producto dentro del catalogo");
+                        if (is_numeric($productoVO->getClave_producto())) {
+                            crearInputNumber("Clave", "Clave_producto", 0, 99999999999, $siRequerido, "", $clase1, "Posición del producto dentro del catalogo");
+                        }
                         crearInputText("Descripción", "Descripcion", 300, $siMayusculas, $siRequerido, "", $clase2, " Id: $busca");
                         crearInputSelect("Unidad de Medida", "cumedida", CatalogosSelectores::getUnidades(), $siRequerido, $clase2, "&nbsp;<i class=\"icon fa fa-lg fa-question-circle\" title='Para habilitar otra unidad de medida favor de comunicarse a Soporte' height='18' aria-hidden=\"true\"></i>");
                         crearInputSelect("Clave de Producto", "common_claveps", CatalogosSelectores::getProductoServicio(), $siRequerido, $clase2, "&nbsp;<i class=\"icon fa fa-lg fa-search-plus\"' title='Busca Producto/Servicio' onclick=\"location='categoriasSAT.php?busca=$busca'\" aria-hidden=\"true\"></i>&nbsp;<i class=\"icon fa fa-lg fa-question-circle\" title='En caso de requerir alguna nueva clave, favor de dar click en la lupa y en el campo de buscar de una descripcion del producto, elija el que mas se asemeje a su producto' height='18' aria-hidden=\"true\"></i>");

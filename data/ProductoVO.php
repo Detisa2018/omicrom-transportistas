@@ -12,6 +12,8 @@
 class ProductoVO {
 
     private $id;
+    private $sucursal;
+    private $folio;
     private $descripcion;
     private $umedida;
     private $rubro;
@@ -38,6 +40,22 @@ class ProductoVO {
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
+    }
+
+    public function setFolio($folio): void {
+        $this->folio = $folio;
     }
 
     public function getCuenta_predial() {

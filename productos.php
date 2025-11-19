@@ -2,7 +2,6 @@
 #Librerias
 session_start();
 
-include_once ("check.php");
 include_once ("libnvo/lib.php");
 include_once ("data/CiaDAO.php");
 
@@ -12,6 +11,7 @@ $request = utils\HTTPUtils::getRequest();
 $arrayFilter = array("Rubro" => 1);
 $nameSession = "catalogoProductos";
 $session = new OmicromSession("inv.clave_producto", "inv.clave_producto", $nameSession, $arrayFilter, "Rubro");
+$usuarioSesion = getSessionUsuario();
 
 $CiaDAO = new CiaDAO();
 $CiaVO = new CiaVO();
@@ -26,15 +26,7 @@ $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
 $Id = 13;
 $Titulo = "Catalogo de productos";
 
-if ($CiaVO->getTipo_permiso() !== "TRA") {
-    if ($Rubro == 1) {
-        $cRubro = "inv.id > 10  AND inv.rubro='Aceites' ";
-    } else {
-        $cRubro = "inv.id > 10  AND inv.rubro <> 'Aceites' ";
-    }
-} elseif ($CiaVO->getTipo_permiso() === "TRA") {
-    $cRubro .= "(inv.id BETWEEN  0 AND 3 OR inv.id > 10)";
-}
+$cRubro .= "(inv.id BETWEEN  0 AND 3 OR inv.id > 10) AND sucursal =  " . $usuarioSesion->getSucursal();
 $paginador = new Paginador($Id,
         "inv.id",
         "LEFT JOIN cfdi33_c_unidades c ON inv.inv_cunidad = c.clave",

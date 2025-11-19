@@ -51,6 +51,12 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     error_log(print_r($productoVO, TRUE));
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
+
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM inv WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $productoVO->setFolio($RsF["Folio"]);
+            $productoVO->setClave_producto($RsF["Folio"]);
+            $productoVO->setSucursal($usuarioSesion->getSucursal());
             if (($id = $productoDAO->create($productoVO)) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
                 BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(), "ADM", "Se agrega el producto " . $productoVO->getDescripcion() . " ID: " . $id);

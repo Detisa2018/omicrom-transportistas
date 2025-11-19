@@ -27,9 +27,6 @@ class CiaDAO implements FunctionsDAO {
 
     public function __construct() {
         $this->conn = getConnection();
-        $this->v_corporativoDAO = new V_CorporativoDAO();
-        $v_corporativoVO = $this->v_corporativoDAO->retrieve(V_CorporativoDAO::ENCRIPT_FIELD);
-        $this->encrypt = $v_corporativoVO->getValor();
     }
 
     public function __destruct() {
