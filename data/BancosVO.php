@@ -17,9 +17,27 @@ class BancosVO {
     private $tipo_moneda = 1;
     private $tipo_cambio = 1;
     private $activo = 1;
+    private $sucursal;
+    private $folio;
 
     function __construct() {
         
+    }
+
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function getFolio() {
+        return $this->folio;
+    }
+
+    public function setSucursal($sucursal) {
+        $this->sucursal = $sucursal;
+    }
+
+    public function setFolio($folio) {
+        $this->folio = $folio;
     }
 
     function getId() {

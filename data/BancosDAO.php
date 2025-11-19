@@ -36,6 +36,8 @@ class BancosDAO implements FunctionsDAO {
     public function create($objectVO) {
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
+                . "folio,"
                 . "rubro,"
                 . "banco,"
                 . "cuenta,"
@@ -45,9 +47,11 @@ class BancosDAO implements FunctionsDAO {
                 . "tipo_cambio,"
                 . "activo"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("issssssi",
+            $ps->bind_param("iiissssssi",
+                    $objectVO->getSucursal(),
+                    $objectVO->getFolio(),
                     $objectVO->getRubro(),
                     $objectVO->getBanco(),
                     $objectVO->getCuenta(),
@@ -81,6 +85,8 @@ class BancosDAO implements FunctionsDAO {
         $objectVO = new BancosVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
+            $objectVO->setFolio($rs["folio"]);
             $objectVO->setRubro($rs["rubro"]);
             $objectVO->setBanco($rs["banco"]);
             $objectVO->setCuenta($rs["cuenta"]);

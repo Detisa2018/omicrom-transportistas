@@ -9,6 +9,7 @@ use com\softcoatl\utils as utils;
 
 $request = utils\HTTPUtils::getRequest();
 $session = new OmicromSession("bancos.id", "bancos.id");
+$usuarioSesion = getSessionUsuario();
 
 require_once './services/BancosService.php';
 
@@ -22,7 +23,7 @@ $paginador = new Paginador($Id,
         "",
         "",
         "",
-        " rubro = " . RubroBanco::EGRESOS . " ",
+        " rubro = " . RubroBanco::EGRESOS . " AND sucursal = " . $usuarioSesion->getSucursal(),
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),

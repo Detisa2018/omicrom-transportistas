@@ -1,4 +1,5 @@
 <?php
+
 #Librerias
 include_once ('data/BancosDAO.php');
 
@@ -25,16 +26,20 @@ if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils
     $objectVO->setTipo_moneda($sanitize->sanitizeInt("Tipo_moneda"));
     $objectVO->setTipo_cambio($sanitize->sanitizeFloat("Tipo_cambio"));
     $objectVO->setActivo($sanitize->sanitizeFloat("Activo"));
-    
+
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
+            $Folio = "SELECT COUNT(1) + 1 Folio FROM bancos WHERE sucursal = " . $usuarioSesion->getSucursal();
+            $RsF = utils\IConnection::execSql($Folio);
+            $objectVO->setFolio($RsF["Folio"]);
+            $objectVO->setSucursal($usuarioSesion->getSucursal());
             if ($objectDAO->create($objectVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
             } else {
                 $Msj = utils\Messages::RESPONSE_ERROR;
             }
         } elseif ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE) {
-            if ($objectDAO->update($objectVO)) {                                            
+            if ($objectDAO->update($objectVO)) {
                 $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
             } else {
                 $Msj = utils\Messages::RESPONSE_ERROR;
@@ -56,13 +61,13 @@ if ($request->hasAttribute("op")) {
 
     try {
         if ($request->getAttribute("op") === utils\Messages::OP_DELETE) {
-            
+
             $ExiA = $mysqli->query("SELECT COUNT(*) exi FROM pagos WHERE banco = '" . $cId . "'; ");
             $ExiPagos = $ExiA->fetch_array();
-            
+
             $ExiB = $mysqli->query("SELECT COUNT(*) exi FROM egr WHERE clave = '" . $cId . "'; ");
             $ExiEgr = $ExiB->fetch_array();
-            
+
             if ($ExiPagos['exi'] > 0) {
                 $Msj = "No se puede eliminar el banco ya que tiene pagos registrados";
             } elseif ($ExiEgr['exi'] > 0) {
