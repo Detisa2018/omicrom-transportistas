@@ -20,7 +20,7 @@ $Id = 61;
 $Titulo = "Catalogo de bancos";
 
 $paginador = new Paginador($Id,
-        "",
+        "id",
         "",
         "",
         " rubro = " . RubroBanco::EGRESOS . " AND sucursal = " . $usuarioSesion->getSucursal(),
