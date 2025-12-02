@@ -142,7 +142,7 @@ class CiaDAO implements FunctionsDAO {
      * @param CiaVO $objectVO
      * @return boolean
      */
-    public function update($objectVO) {
+    public function update($objectVO, $sucursal = 0) {
         $usuarioSesion = getSessionUsuario();
         $sql = " UPDATE " . self::TABLA . " SET "
                 . "idfae = ?, "
@@ -204,10 +204,10 @@ class CiaDAO implements FunctionsDAO {
                 . "caracter_sat = ?, "
                 . "modalidad_permiso = ?, "
                 . "descripcion = ? "
-                . "WHERE 1";
+                . "WHERE idfae = " . $sucursal;
 
         if ($this->encrypt == 1) {
-            $sql = " UPDATE " . self::TABLA . " SET " . CiaVO::retrieveEncryptFieds() . " WHERE 1";
+            $sql = " UPDATE " . self::TABLA . " SET " . CiaVO::retrieveEncryptFieds() . " WHERE  idfae = " . $sucursal;
         }
 
         if (($ps = $this->conn->prepare($sql))) {

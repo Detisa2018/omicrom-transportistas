@@ -12,14 +12,16 @@ $RetSelec = "menu.php";
 $Titulo = "Parametros del sistema";
 $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
 
+$usuarioSesion = getSessionUsuario();
 $ciaDAO = new CiaDAO();
-$objectVO = $ciaDAO->retrieve(1);
+$objectVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
 //echo print_r($objectVO, true);
 require_once './services/ParametrosService.php';
 
 $latitud = $objectVO->getLatitud();
 $longitud = $objectVO->getLongitud();
 $link = sprintf("https://maps.google.com/maps?q=loc:%f,%f", $latitud, $longitud);
+echo print_r($objectVO, true);
 ?>
 
 <!DOCTYPE html>

@@ -38,6 +38,7 @@ class TerminalPosDAO implements FunctionsDAO {
         error_log(print_r($objectVO, true));
         $id = -1;
         $sql = "INSERT INTO " . self::TABLA . " ("
+                . "sucursal,"
                 . "printed_serial,"
                 . "serial,"
                 . "model,"
@@ -50,9 +51,10 @@ class TerminalPosDAO implements FunctionsDAO {
                 . "dispositivo,"
                 . "lastConnection"
                 . ") "
-                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?, NOW())";
+                . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, NOW())";
         if (($ps = $this->conn->prepare($sql))) {
-            $ps->bind_param("ssssssssss",
+            $ps->bind_param("issssssssss",
+                    $objectVO->getSucursal(),
                     $objectVO->getPrinted_serial(),
                     $objectVO->getSerial(),
                     $objectVO->getModel(),
@@ -87,6 +89,7 @@ class TerminalPosDAO implements FunctionsDAO {
         $objectVO = new TerminalPosVO();
         if (is_array($rs)) {
             $objectVO->setId($rs["pos_id"]);
+            $objectVO->setSucursal($rs["sucursal"]);
             $objectVO->setPrinted_serial($rs["printed_serial"]);
             $objectVO->setSerial($rs["serial"]);
             $objectVO->setModel($rs["model"]);

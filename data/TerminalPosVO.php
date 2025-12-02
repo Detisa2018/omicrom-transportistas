@@ -12,6 +12,7 @@
 class TerminalPosVO {
 
     private $id;
+    private $sucursal;
     private $printed_serial;
     private $serial;
     private $model;
@@ -28,6 +29,14 @@ class TerminalPosVO {
         
     }
 
+    public function getSucursal() {
+        return $this->sucursal;
+    }
+
+    public function setSucursal($sucursal): void {
+        $this->sucursal = $sucursal;
+    }
+
     function getId() {
         return $this->id;
     }
@@ -35,6 +44,7 @@ class TerminalPosVO {
     function getPrinted_serial() {
         return $this->printed_serial;
     }
+
     function getSerial() {
         return $this->serial;
     }
@@ -82,7 +92,7 @@ class TerminalPosVO {
     function setPrinted_serial($printed_serial) {
         $this->printed_serial = $printed_serial;
     }
-    
+
     function setSerial($serial) {
         $this->serial = $serial;
     }

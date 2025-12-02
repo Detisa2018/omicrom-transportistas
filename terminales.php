@@ -8,6 +8,7 @@ include_once ("libnvo/lib.php");
 
 use com\softcoatl\utils as utils;
 
+$usuarioSesion = getSessionUsuario();
 $request = utils\HTTPUtils::getRequest();
 $session = new OmicromSession("ter.pos_id", "ter.pos_id");
 
@@ -17,11 +18,12 @@ $Msj = urldecode(utils\HTTPUtils::getRequest()->getAttribute("Msj"));
 $Id = 83;
 $Titulo = "Catalogo de Activos";
 
+$conditions = " sucursal =  " . $usuarioSesion->getSucursal();
 $paginador = new Paginador($Id,
+        "pos_id",
         "",
         "",
-        "",
-        "",
+        "$conditions",
         $session->getSessionAttribute("sortField"),
         $session->getSessionAttribute("criteriaField"),
         utils\Utils::split($session->getSessionAttribute("criteria"), "|"),

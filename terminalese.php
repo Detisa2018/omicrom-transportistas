@@ -21,9 +21,6 @@ if ($request->hasAttribute($nameVarBusca)) {
 $busca = utils\HTTPUtils::getSessionValue($nameVarBusca);
 
 $terminalPosVO = new TerminalPosVO();
-$terminalPosVO->setModel("NEW8210");
-$terminalPosVO->setDispositivo("T");
-$terminalPosVO->setStatus(StatusTerminal::ACTIVO);
 if (is_numeric($busca)) {
     $terminalPosVO = $terminalPosDAO->retrieve($busca, "pos_id");
 }

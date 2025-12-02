@@ -9,6 +9,8 @@ $mysqli = iconnect();
 $request = utils\HTTPUtils::getRequest();
 $sanitize = SanitizeUtil::getInstance();
 
+$usuarioSesion = getSessionUsuario();
+
 if ($request->hasAttribute("Boton")) {
     $ciaDAO = new CiaDAO();
     $Msj = utils\Messages::MESSAGE_NO_OPERATION;
@@ -18,7 +20,7 @@ if ($request->hasAttribute("Boton")) {
         if ($request->hasAttribute("Boton") && $request->getAttribute("Boton") !== utils\Messages::OP_NO_OPERATION_VALID) {
 
             if ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE) {
-                $objectVO = $ciaDAO->retrieve(1);
+                $objectVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
 
                 $objectVO->setCia($sanitize->sanitizeString("Cia"));
                 $objectVO->setRfc($sanitize->sanitizeString("Rfc"));
@@ -42,36 +44,45 @@ if ($request->hasAttribute("Boton")) {
                 $objectVO->setEstadoexp($sanitize->sanitizeString("Estadoexp"));
                 $objectVO->setCodigoexp($sanitize->sanitizeString("Codigoexp"));
 
-                if ($ciaDAO->update($objectVO)) {
+                if ($ciaDAO->update($objectVO, $usuarioSesion->getSucursal())) {
                     $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
                 } else {
                     $Msj = utils\Messages::RESPONSE_ERROR;
                 }
             } elseif ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE . " Localizacion") {
-                $objectVO = $ciaDAO->retrieve(1);
+                $objectVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
                 $objectVO->setLatitud($sanitize->sanitizeFloat("Latitud"));
                 $objectVO->setLongitud($sanitize->sanitizeFloat("Longitud"));
 
-                if ($ciaDAO->update($objectVO)) {
+                if ($ciaDAO->update($objectVO, $usuarioSesion->getSucursal())) {
                     $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
                 } else {
                     $Msj = utils\Messages::RESPONSE_ERROR;
                 }
             } elseif ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE . " SAT") {
-                $objectVO = $ciaDAO->retrieve(1);
+                $objectVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
                 $objectVO->setCaracter_sat($sanitize->sanitizeString("Caracter_sat"));
                 $objectVO->setClave_instalacion($sanitize->sanitizeString("Clave_instalacion"));
                 $objectVO->setModalidad_permiso($sanitize->sanitizeString("Modalidad_permiso"));
 
-                if ($ciaDAO->update($objectVO)) {
+                if ($ciaDAO->update($objectVO, $usuarioSesion->getSucursal())) {
                     $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
                 } else {
                     $Msj = utils\Messages::RESPONSE_ERROR;
                 }
             } elseif ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE . " Verificacion") {
-                $UpdateVerif = "UPDATE variables_corporativo SET valor = '" . $request->getAttribute("UltimaVerificacion") . "' WHERE  llave = 'FechaUltimaVerificacion';";
-                utils\IConnection::execSql($UpdateVerif);
-                $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
+                $UltimaVerificacion = "SELECT valor FROM variables_corporativo WHERE llave = 'FechaUltimaVerificacion" . $usuarioSesion->getSucursal() . "';";
+                $Ulv = utils\IConnection::execSql($UltimaVerificacion);
+                if (empty($Ulv["valor"])) {
+                    $InsertVC = "INSERT INTO variables_corporativo (llave, valor, descripcion) VALUES "
+                            . "('FechaUltimaVerificacion" . $usuarioSesion->getSucursal() . "', '" . $request->getAttribute("UltimaVerificacion") . "', 'Fecha en cuando se verifica anexo 30');";
+                } else {
+                    $InsertVC = "UPDATE variables_corporativo SET valor = '" . $request->getAttribute("UltimaVerificacion") . "' "
+                            . "WHERE llave = 'FechaUltimaVerificacion" . $usuarioSesion->getSucursal() . "';";
+                }
+                if (utils\IConnection::execSql($InsertVC)) {
+                    $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
+                }
             }
         }
 
@@ -82,5 +93,5 @@ if ($request->hasAttribute("Boton")) {
         header("Location: $Return");
     }
 }
-$UltimaVerificacion = "SELECT valor FROM omicrom.variables_corporativo WHERE llave = 'FechaUltimaVerificacion';";
+$UltimaVerificacion = "SELECT valor FROM variables_corporativo WHERE llave = 'FechaUltimaVerificacion" . $usuarioSesion->getSucursal() . "';";
 $Ulv = utils\IConnection::execSql($UltimaVerificacion);

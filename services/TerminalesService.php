@@ -17,7 +17,7 @@ if ($request->hasAttribute("Boton")) {
     $Msj = utils\Messages::MESSAGE_NO_OPERATION;
 
     $terminalPosVO = new TerminalPosVO();
-    if(is_numeric($sanitize->sanitizeInt("busca"))){
+    if (is_numeric($sanitize->sanitizeInt("busca"))) {
         $terminalPosVO = $terminalPosDAO->retrieve($sanitize->sanitizeInt("busca"), "pos_id");
     }
     $terminalPosVO->setSerial($sanitize->sanitizeString("Serial"));
@@ -28,20 +28,20 @@ if ($request->hasAttribute("Boton")) {
     $terminalPosVO->setDispositivo($sanitize->sanitizeString("Dispositivo"));
     try {
         if ($request->getAttribute("Boton") === utils\Messages::OP_ADD) {
+            $terminalPosVO->setSucursal($usuarioSesion->getSucursal());
             if ($terminalPosDAO->create($terminalPosVO) > 0) {
                 $Msj = utils\Messages::RESPONSE_VALID_CREATE;
-                BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(),"ADM","CREACION DE TERMINAL " . $terminalPosVO->getSerial());
+                BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(), "ADM", "CREACION DE TERMINAL " . $terminalPosVO->getSerial());
             } else {
                 $Msj = utils\Messages::RESPONSE_ERROR;
             }
         } elseif ($request->getAttribute("Boton") === utils\Messages::OP_UPDATE) {
             if ($terminalPosDAO->update($terminalPosVO)) {
                 $Msj = utils\Messages::RESPONSE_VALID_UPDATE;
-                BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(),"ADM","ACTUALIZACION DE TERMINAL " . $terminalPosVO->getSerial());
+                BitacoraDAO::getInstance()->saveLog($usuarioSesion->getNombre(), "ADM", "ACTUALIZACION DE TERMINAL " . $terminalPosVO->getSerial());
             } else {
                 $Msj = utils\Messages::RESPONSE_ERROR;
             }
-
         }
     } catch (Exception $ex) {
         error_log("Error en terminales: " . $ex);
