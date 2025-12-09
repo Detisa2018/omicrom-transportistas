@@ -632,7 +632,7 @@ $MovIEPS = utils\IConnection::execSql($MovimientosIEPS);
                                 </div>
                             </div>
                             <?php
-                            $ciaVO = $ciaDAO->retrieve("true");
+                            $ciaVO = $ciaDAO->retrieve($usuarioSesion->getSucursal());
                             if ($ciaVO->getTipo_permiso() === "TRA") {
                                 $objectVO = new DireccionVO();
                                 $direccionDAO = new DireccionDAO();
